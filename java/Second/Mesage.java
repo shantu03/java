@@ -5,7 +5,7 @@ public static void main(String args[]) {
 	double b=5;
 	System.out.println(b);
 	char p ='a';
-	System.out.println();
+	System.out.println((int)p);
 
 }
 }
