@@ -1,13 +1,13 @@
 package P_Practice;
 
-public class first{
+public class Package_Practice{
 	 public void hero()
 	{
 		System.out.println("Practice Class --> hero()");
 	}
 
 }
- public class Second{
+  /*public */class Second{
 	public void show()
 	{
 		System.out.println("Second class  --> show()");
