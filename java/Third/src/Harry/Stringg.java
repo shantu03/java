@@ -1,7 +1,7 @@
 package Harry;
 public class Stringg {
     public static void main(String[] args) {
-        //page17-18
+//        page17-18
         char[] nname = {'s', 'h', 'a', 'n', 't', 'u'};
         String namee = new String(nname);
         String hello=new String("hello world");

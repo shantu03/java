@@ -2,6 +2,7 @@ package Harry;
 
 public class Multidimensional_array {
     public static void main(String[] args) {
+//        page 22;
         int [][] arr=new int[5][5];
         int p=0;
         for(int i=0;i<3;i++)
