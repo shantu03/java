@@ -3,7 +3,7 @@ package P_Practice;
 import java.util.*;
 
 class number {
-    private int user, small = 0, big = 100, prebig, presmall;
+    private int user, small = 0, big = 100, prebig=100, presmall=0;
 
     public void setUser(int user) {
         if (user > this.random) {
@@ -46,20 +46,21 @@ class number {
     }
 
     public boolean playagain() {
-        String opinion;
-        System.out.println("Do you wish to Play again : \"Yes\" or \"No\"");
-        opinion = new Scanner(System.in).next();
-        opinion = opinion.toLowerCase();
-        if (opinion.equals("yes")) {
-            this.random = new Random().nextInt(101);
-            this.score = 0;
-            return true;
-        } else if (opinion.equals("no")) {
-            return false;
-        } else {
-            System.out.println("enter valid statement");
-            playagain();
-            return true;
+        while(true) {
+            String opinion;
+            System.out.println("Do you wish to Play again : \"Yes\" or \"No\"");
+            opinion = new Scanner(System.in).next();
+            opinion = opinion.toLowerCase();
+            if (opinion.equals("yes")) {
+                this.random = new Random().nextInt(101);
+                this.score = 0;
+                return true;
+            } else if (opinion.equals("no")) {
+                return false;
+            } else {
+                System.out.println("enter valid statement");
+
+            }
         }
 
     }

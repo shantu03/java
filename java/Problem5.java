@@ -87,10 +87,13 @@ public class Problem5 {
         String tab;
         do {
             Matrix[] obj = new Matrix[3];
+            int k=new Random().nextInt(5)+2;
+            int y=new Random().nextInt(5)+2;
             for (int i = 0; i < 3; i++) {
                 obj[i] = new Matrix();
-                obj[i].setRow(3);
-                obj[i].setColumn(4);
+            
+                obj[i].setRow(k);
+                obj[i].setColumn(y);
                 obj[i].arrayMemory();
                 if (i == 2) {
                     continue;
@@ -105,7 +108,7 @@ public class Problem5 {
                 }
 
                 while (true) {
-                    System.out.println("ENTER 'add' FOR ADDITION & 'mul' FOR MULTIPLICATION");
+                    System.out.println("ENTER 'add' FOR ADDITION\t'mul' FOR MULTIPLICATION\t'sub' FOR SUBSTRACTION\t'div' for DIVISON");
                     String choice = new Scanner(System.in).next();
                     if (choice.equals("add")) {
                         if ((obj[0].getRows() == obj[1].getRows()) && (obj[0].getColumns() == obj[1].getColumns())) {
