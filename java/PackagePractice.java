@@ -1,0 +1,5 @@
+package folder;
+
+class folder
+{
+}
