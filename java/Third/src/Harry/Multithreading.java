@@ -2,6 +2,13 @@ package Harry;
 
 //PAGE 22
 class thread1 extends Thread {
+    thread1() {
+        System.out.println("Default Constructor in Thread");
+    }
+    thread1(String name) {
+        super(name);
+        System.out.println("Parametrised constructor in thread");
+    }
     public void run() {
         for (int i = 0; i < 200; i++) {
             System.out.println("Thread 1   "+i);
