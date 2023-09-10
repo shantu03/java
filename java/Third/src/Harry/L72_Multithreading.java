@@ -30,7 +30,7 @@ class normal_class {
     }
 }
 
-public class Multithreading {
+public class L72_Multithreading {
     public static void main(String[] args) {
         long start =System.currentTimeMillis();
         normal_class obj1=new normal_class();

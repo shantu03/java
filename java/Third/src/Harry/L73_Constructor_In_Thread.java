@@ -1,5 +1,6 @@
 package Harry;
-
+//PAGE 24
+//WE ARE USING L72 FILE THREAD CLASS
 public class L73_Constructor_In_Thread {
     public static void main(String[] args) {
         thread1 object =new thread1("Shantu");
