@@ -5,8 +5,10 @@ DSA/
 C/
 README.md
 C++/commas
-.gitignore
+Code.iml
 Microsoft VS/
 Setup/
 postgreSQL/
 pgAdmin 4/
+*.class
+.idea/
