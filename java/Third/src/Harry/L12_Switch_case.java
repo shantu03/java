@@ -1,3 +1,5 @@
+package Harry;
+
 import java.util.*;
 //EMAIL AND PASSWORD CHECKING ---->giving  error in this  code 
 public class L12_Switch_case {

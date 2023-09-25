@@ -1,4 +1,4 @@
-//INTRODUCTION TO SCANNER CLASS WE ALREADY DISCOVERD
+package Harry;//INTRODUCTION TO SCANNER CLASS WE ALREADY DISCOVERD
 
 
 //This only work for String Input with expection 
