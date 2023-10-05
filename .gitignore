@@ -12,3 +12,5 @@ postgreSQL/
 pgAdmin 4/
 *.class
 .idea/
+temp.java
+Docs/

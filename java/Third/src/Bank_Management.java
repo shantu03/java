@@ -1,11 +1,20 @@
+
 import java.util.Scanner;
+
 public class Bank_Management {
+
 	public static void main(String[] args) {
 		System.out.println("Enter your name and customer ID");
 		Scanner sc=new Scanner(System.in);
-		String name=sc.nextLine();
-		String Id=sc.nextLine();
-		
+		String name=null;
+		String Id=null;
+		try {
+			 name = sc.nextLine();
+			 Id = sc.nextLine();
+		}catch (Exception e)
+		{
+			System.out.println("Please Enter correct Detail -> "+e );
+		}
 		Bman obj=new Bman(name,Id);
 		obj.menu();
 	}
@@ -89,9 +98,15 @@ class Bman{
 		System.out.println("Please select opiton "
 				+ "\n a)Check Balance\n b)Deposite Money\n c)Withdraw Money"
 				+"\n d)Transfer Money\n e)Transition History\n f)exit");
-		Scanner tc=new Scanner(System.in);
-		char status=tc.next().charAt(0);
-		
+			Scanner tc = new Scanner(System.in);
+			char status=0;
+		try {
+
+			 status = tc.next().charAt(0);
+		}catch (Exception e )
+		{
+			System.out.println("Please Enter correct Detail  -> "+e);
+		}
 		switch(status)
 		{
 		case 'a':
@@ -103,7 +118,15 @@ class Bman{
 		case 'b':
 		{
 			System.out.println("Enter amount to deposite money ");
-			double damt=tc.nextDouble();
+			double damt=0;
+			try {
+
+				 damt=tc.nextDouble();
+			}catch (Exception e )
+			{
+				System.out.println("Please Enter correct Detail  -> "+e);
+			}
+
 			deposit(damt);
 			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
 		
@@ -112,19 +135,43 @@ class Bman{
 		{
 			System.out.println("++++++++++++++++++++++++++++++++++++++\n"
 					+"Enter amount to withdraw ");
-			double wamt=tc.nextDouble();
+			double wamt=0;
+			try {
+
+				wamt=tc.nextDouble();
+			}catch (Exception e )
+			{
+				System.out.println("Please Enter correct Detail  -> "+e);
+			}
+
 			withdraw(wamt);
 			System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++");
 		break;}
 		case 'd':
 		{
-			System.out.println("Enter customer id to transfer money ");
-			String cid=tc.next();
-			System.out.println("Enter amount ");
-			double tamt=tc.nextDouble();
+			String cid = null;
+			double tamt = 0;
+			while(true) {
+
+				try {
+					System.out.println("Enter customer id to transfer money ");
+					cid = tc.next();
+					System.out.println("Enter amount ");
+					tamt = tc.nextDouble();
+					break;
+				} catch (Exception e) {
+					System.out.println("Please ENter correct Detail");
+				}
+			}
 			do {
-			System.out.println(tamt + "transfering to " + cid + "\nEnter 1 to confirm or 2 to cancle");
-			int k=tc.nextInt();
+			System.out.println(tamt + "transfering to " + cid + "\nEnter 1 to confirm or 2 to cancel");
+				int k=0;
+			try {
+				 k = tc.nextInt();
+			}catch (Exception e)
+			{
+				System.out.println("Please Enter correct option ");
+			}
 			System.out.println("+++++++++++++++++++++++++++++++++++++++++");
 			if(k==1)
 			{
@@ -136,7 +183,7 @@ class Bman{
 			}
 			else if(k==2)
 			{
-				System.out.println("Cancel Transfer");
+				System.out.println(" Transfer Canceled");
 				break;
 			}
 			else
