@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
 public class temp1 extends JFrame {
-    private JTextField textField;
+    private JTextField accountField;
     private JPasswordField pinField;
     private JButton loginButton;
     private JLabel statusLabel;
@@ -17,7 +17,7 @@ public class temp1 extends JFrame {
     private JTextField amountField;
     private JTextArea transactionHistoryArea;
 
-    private double balance = 1000.0; // Initial balance for the example
+    private double balance = 1000.0;
 
     public temp1() {
         setTitle("ATM Interface");
@@ -32,7 +32,7 @@ public class temp1 extends JFrame {
         JLabel pinLabel = new JLabel("PIN:");
         JLabel amountLabel = new JLabel("Amount:");
 
-        textField = new JTextField(10);
+        accountField = new JTextField(10);
         pinField = new JPasswordField(10);
         amountField = new JTextField(10);
 
@@ -48,7 +48,7 @@ public class temp1 extends JFrame {
 
 
         panel.add(accountLabel);
-        panel.add(textField);
+        panel.add(accountField);
         panel.add(pinLabel);
         panel.add(pinField);
         panel.add(loginButton);
@@ -66,13 +66,16 @@ public class temp1 extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String accountNumber = textField.getText();
+                String accountNumber = accountField.getText();
                 String pin = new String(pinField.getPassword());
 
                 // Replace with your account validation logic
                 if (isValidAccount(accountNumber, pin)) {
                     statusLabel.setText("Logged in as Account: " + accountNumber);
                     enableTransactionButtons(true);
+                    pinField.setEnabled(false);
+                    accountLabel.setText("Receiver A/C number : ");
+                    accountField.setText("");
                 } else {
                     statusLabel.setText("Login failed. Please try again.");
                 }
@@ -90,6 +93,7 @@ public class temp1 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = getAmount();
+                amountField.setText("");
                 if (amount > 0 && amount <= balance) {
                     balance -= amount;
                     appendTransactionHistory("Withdraw: $" + formatCurrency(amount));
@@ -103,6 +107,8 @@ public class temp1 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = getAmount();
+                amountField.setText("");
+
                 if (amount > 0) {
                     balance += amount;
                     appendTransactionHistory("Deposit: $" + formatCurrency(amount));
@@ -116,12 +122,16 @@ public class temp1 extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = getAmount();
-                if (amount > 0 && amount <= balance) {
+
+
+                if ((amount > 0 && amount <= balance)&& !accountField.getText().equals("")) {
                     balance -= amount;
-                    appendTransactionHistory("Transfer: $" + formatCurrency(amount) + " to Account " + textField.getText());
+                    appendTransactionHistory("Transfer: $" + formatCurrency(amount) + " to Account " + accountField.getText());
                 } else {
                     appendTransactionHistory("Invalid transfer amount.");
                 }
+                amountField.setText("");
+                accountField.setText("");
             }
         });
 
@@ -157,11 +167,7 @@ public class temp1 extends JFrame {
         depositButton.setEnabled(enable);
         transferButton.setEnabled(enable);
     }
-
     public static void main(String[] args) {
-
                 new temp1().setVisible(true);
-
-
     }
 }
