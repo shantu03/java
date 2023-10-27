@@ -1,8 +1,21 @@
 package Project;
-import javax.swing.*;
-import java.awt.*;
+
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
 
 public class temp1 extends JFrame {
@@ -17,9 +30,10 @@ public class temp1 extends JFrame {
     private JTextField amountField;
     private JTextArea transactionHistoryArea;
 
-    private double balance = 1000.0;
+    double balance;
+    String usr;
 
-    public temp1() {
+    public temp1() throws SQLException {
         setTitle("ATM Interface");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
@@ -63,21 +77,30 @@ public class temp1 extends JFrame {
         getContentPane().add(panel, BorderLayout.NORTH);
         getContentPane().add(new JScrollPane(transactionHistoryArea), BorderLayout.CENTER);
 
+
+        DatabaseConnection c=new DatabaseConnection();
+//        Statement smt=c.connection.createStatement();
+        PreparedStatement preparedStatement=c.connection.prepareStatement("update login set amount=? where username=?");
+
+
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String accountNumber = accountField.getText();
                 String pin = new String(pinField.getPassword());
 
-                // Replace with your account validation logic
-                if (isValidAccount(accountNumber, pin)) {
-                    statusLabel.setText("Logged in as Account: " + accountNumber);
-                    enableTransactionButtons(true);
-                    pinField.setEnabled(false);
-                    accountLabel.setText("Receiver A/C number : ");
-                    accountField.setText("");
-                } else {
-                    statusLabel.setText("Login failed. Please try again.");
+                try {
+                    if (isValidAccount(accountNumber, pin)) {
+                        statusLabel.setText("Logged in as Account: " + accountNumber);
+                        enableTransactionButtons(true);
+                        pinField.setEnabled(false);
+                        accountLabel.setText("Receiver A/C number : ");
+                        accountField.setText("");
+                    } else {
+                        statusLabel.setText("Login failed. Please try again.");
+                    }
+                } catch (Exception exception) {
+                    System.out.println("Error in Login Field");
                 }
             }
         });
@@ -97,6 +120,18 @@ public class temp1 extends JFrame {
                 if (amount > 0 && amount <= balance) {
                     balance -= amount;
                     appendTransactionHistory("Withdraw: $" + formatCurrency(amount));
+
+                    try {
+                        preparedStatement.setDouble(1,balance);
+                        preparedStatement.setString(2,usr);
+                        preparedStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+
+
+
                 } else {
                     appendTransactionHistory("Invalid withdrawal amount.");
                 }
@@ -112,6 +147,17 @@ public class temp1 extends JFrame {
                 if (amount > 0) {
                     balance += amount;
                     appendTransactionHistory("Deposit: $" + formatCurrency(amount));
+
+
+                    try {
+                        preparedStatement.setDouble(1,balance);
+                        preparedStatement.setString(2,usr);
+                        preparedStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+
                 } else {
                     appendTransactionHistory("Invalid deposit amount.");
                 }
@@ -127,6 +173,16 @@ public class temp1 extends JFrame {
                 if ((amount > 0 && amount <= balance)&& !accountField.getText().equals("")) {
                     balance -= amount;
                     appendTransactionHistory("Transfer: $" + formatCurrency(amount) + " to Account " + accountField.getText());
+
+                    try {
+                        preparedStatement.setDouble(1,balance);
+                        preparedStatement.setString(2,usr);
+                        preparedStatement.executeUpdate();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+
                 } else {
                     appendTransactionHistory("Invalid transfer amount.");
                 }
@@ -138,10 +194,22 @@ public class temp1 extends JFrame {
         enableTransactionButtons(false);
     }
 
-    private boolean isValidAccount(String accountNumber, String pin) {
-        // Replace with your account validation logic
-        // For the sake of this example, we use a hardcoded account number and PIN.
-        return accountNumber.equals("123456") && pin.equals("1234");
+    private boolean isValidAccount(String accountNumber, String pin) throws SQLException {
+        DatabaseConnection c=new DatabaseConnection();
+        Statement smt=c.connection.createStatement();
+        ResultSet set = smt.executeQuery("select * from login");
+        while (set.next()) {
+            String user = set.getString(1);
+            String pass = set.getString(2);
+            if (user.equals(accountNumber) && pass.equals(pin)) {
+                usr=user;
+                balance = set.getDouble(3);
+                return true;
+            }
+        }
+        return false;
+
+
     }
 
     private double getAmount() {
@@ -167,7 +235,7 @@ public class temp1 extends JFrame {
         depositButton.setEnabled(enable);
         transferButton.setEnabled(enable);
     }
-    public static void main(String[] args) {
-                new temp1().setVisible(true);
+    public static void main(String[] args) throws SQLException {
+        new temp1().setVisible(true);
     }
 }
