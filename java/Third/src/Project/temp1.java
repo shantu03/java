@@ -10,8 +10,6 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,13 +30,14 @@ public class temp1 extends JFrame {
 
     double balance;
     String usr;
+    int count;
 
     public temp1() throws SQLException {
         setTitle("ATM Interface");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 400);
         setLocationRelativeTo(null);
-
+        count=0;
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(7, 2));
 
@@ -83,43 +82,84 @@ public class temp1 extends JFrame {
         PreparedStatement preparedStatement=c.connection.prepareStatement("update login set amount=? where username=?");
 
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String accountNumber = accountField.getText();
-                String pin = new String(pinField.getPassword());
+        loginButton.addActionListener(e -> {
+            String accountNumber = accountField.getText();
+            String pin = new String(pinField.getPassword());
+
+            try {
+                if (isValidAccount(accountNumber, pin)) {
+                    statusLabel.setText("Logged in as Account: " + accountNumber);
+                    count++;
+                    enableTransactionButtons(true);
+                    pinField.setEnabled(false);
+                    accountLabel.setText("Receiver A/C number : ");
+                    accountField.setText("");
+                } else if (count>0) {
+                    statusLabel.setText("Already Logged-in as - "+usr);
+                } else {
+                    statusLabel.setText("Login failed. Please try again.");
+                }
+            } catch (Exception exception) {
+                System.out.println("Error in Login Field");
+            }
+        });
+
+        balanceButton.addActionListener(e -> appendTransactionHistory("Balance check: $" + formatCurrency(balance)));
+
+        withdrawButton.addActionListener(e -> {
+            double amount = getAmount();
+            amountField.setText("");
+            if (amount > 0 && amount <= balance) {
+                balance -= amount;
+                appendTransactionHistory("Withdraw: $" + formatCurrency(amount));
 
                 try {
-                    if (isValidAccount(accountNumber, pin)) {
-                        statusLabel.setText("Logged in as Account: " + accountNumber);
-                        enableTransactionButtons(true);
-                        pinField.setEnabled(false);
-                        accountLabel.setText("Receiver A/C number : ");
-                        accountField.setText("");
-                    } else {
-                        statusLabel.setText("Login failed. Please try again.");
-                    }
-                } catch (Exception exception) {
-                    System.out.println("Error in Login Field");
+                    preparedStatement.setDouble(1,balance);
+                    preparedStatement.setString(2,usr);
+                    preparedStatement.executeUpdate();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
                 }
+
+
+
+
+            } else {
+                appendTransactionHistory("Invalid withdrawal amount.");
             }
         });
 
-        balanceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                appendTransactionHistory("Balance check: $" + formatCurrency(balance));
+        depositButton.addActionListener(e -> {
+            double amount = getAmount();
+            amountField.setText("");
+
+            if (amount > 0) {
+                balance += amount;
+                appendTransactionHistory("Deposit: $" + formatCurrency(amount));
+
+
+                try {
+                    preparedStatement.setDouble(1,balance);
+                    preparedStatement.setString(2,usr);
+                    preparedStatement.executeUpdate();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+
+            } else {
+                appendTransactionHistory("Invalid deposit amount.");
             }
         });
 
-        withdrawButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double amount = getAmount();
-                amountField.setText("");
-                if (amount > 0 && amount <= balance) {
+        transferButton.addActionListener(e -> {
+            double amount = getAmount();
+
+            try {
+                if ((amount > 0 && amount <= balance)&& isValidReciver(accountField.getText())) {
                     balance -= amount;
-                    appendTransactionHistory("Withdraw: $" + formatCurrency(amount));
+                    double receiveramt=0;
+                    appendTransactionHistory("Transfer: $" + formatCurrency(amount) + " to Account - " + accountField.getText());
 
                     try {
                         preparedStatement.setDouble(1,balance);
@@ -129,69 +169,51 @@ public class temp1 extends JFrame {
                         throw new RuntimeException(ex);
                     }
 
-
-
-
-                } else {
-                    appendTransactionHistory("Invalid withdrawal amount.");
-                }
-            }
-        });
-
-        depositButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double amount = getAmount();
-                amountField.setText("");
-
-                if (amount > 0) {
-                    balance += amount;
-                    appendTransactionHistory("Deposit: $" + formatCurrency(amount));
-
-
                     try {
-                        preparedStatement.setDouble(1,balance);
-                        preparedStatement.setString(2,usr);
+                        PreparedStatement statement = c.connection.prepareStatement("select amount from login where username=?");
+                        statement.setString(1,accountField.getText());
+                        ResultSet set=statement.executeQuery();
+                        while (set.next()) {
+                            receiveramt = set.getDouble("amount");
+
+                        }
+                        receiveramt+=amount;
+
+                        preparedStatement.setDouble(1,receiveramt);
+                        preparedStatement.setString(2,accountField.getText());
                         preparedStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
+                    } catch (SQLException exception) {
+                        throw new RuntimeException(exception);
                     }
 
 
                 } else {
-                    appendTransactionHistory("Invalid deposit amount.");
+                    appendTransactionHistory("Invalid Transaction Detail.");
                 }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
-        });
-
-        transferButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double amount = getAmount();
-
-
-                if ((amount > 0 && amount <= balance)&& !accountField.getText().equals("")) {
-                    balance -= amount;
-                    appendTransactionHistory("Transfer: $" + formatCurrency(amount) + " to Account " + accountField.getText());
-
-                    try {
-                        preparedStatement.setDouble(1,balance);
-                        preparedStatement.setString(2,usr);
-                        preparedStatement.executeUpdate();
-                    } catch (SQLException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-
-                } else {
-                    appendTransactionHistory("Invalid transfer amount.");
-                }
-                amountField.setText("");
-                accountField.setText("");
-            }
+            amountField.setText("");
+            accountField.setText("");
         });
 
         enableTransactionButtons(false);
+    }
+
+    boolean isValidReciver(String receiver) throws SQLException {
+        DatabaseConnection c=new DatabaseConnection();
+        Statement smt=c.connection.createStatement();
+        ResultSet set = smt.executeQuery("select * from login");
+
+        while (set.next()) {
+            String temp = set.getString("username");
+            if (temp.equals(receiver)) {
+//                System.out.println("receiver found");
+                return true;
+            }
+        }
+//        System.out.println("receiver not found");
+        return false;
     }
 
     private boolean isValidAccount(String accountNumber, String pin) throws SQLException {

@@ -13,7 +13,9 @@ public class DatabaseConnection {
     public DatabaseConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ATM","root","system");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ATM","root","Shantu03");
+
+
         } catch (Exception e) {
             System.out.println("Error while connecting with Database");
         }
