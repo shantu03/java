@@ -32,15 +32,20 @@ public class DynamicMethodDispath {
         A obj =new A();
         B obj1=new B();
         C obj2=new C();
+
         obj.show();
         System.out.println();
         obj1.show();
+
         System.out.println();
         obj2.show();
+
         System.out.println();
         obj1.Bshow();
+
         System.out.println();
         obj2.Cshow();
+
         System.out.println();
         obj=obj2;
         obj.show();
