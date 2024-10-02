@@ -1,7 +1,7 @@
-// Online Java Compiler
-// Use this editor to write, compile and run your Java code online
+
+// TOP DOWN APPROACH 
 import java.util.Random;
-class Main {
+class Binary_Knapsack_Iterative {
     public static void main(String[] args) {
         int n=7;
 
