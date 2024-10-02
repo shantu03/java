@@ -1,3 +1,6 @@
+//BOTTOM UP APPROACH 
+//TABULATION VERSION FROM PW CLASS
+
 import java.util.Random;
 
 public class Binary_Knapsack_Tabulation{
