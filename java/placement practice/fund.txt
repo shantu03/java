@@ -15,10 +15,8 @@ angle			6231.78
 kotak			21049.0
 jupi			3587.0
 ipo			14945.0
-minus-rohan		-200.0
-plus-saurabh		500.0
+minus-rohan			-200.0
+plus-saurabh			500.0
+raut			20000.0
 
- total			46112.78
-
-==============================================================
-
+ total			66112.78
