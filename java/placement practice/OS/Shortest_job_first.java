@@ -5,36 +5,47 @@ import java.util.Scanner;
 public class Shortest_job_first {
     public static void main(String[] args) {
         // int arr[][]=assign_user();
-        // int arr[][]=assign_random();
-        int arr[][]={{1,7,1},{2,4,0},{3,3,1},{4,3,0}};
-        System.out.println("\n"+sjf(arr));
+        int arr[][]=assign_random();
+        // int arr[][]={{1,7,1},{2,4,0},{3,3,1},{4,3,0}};
+        // System.out.println("\n"+sjf(arr));
+
+        srjf(arr);
+        
     }
     static void srjf(int arr[][])
     {
+        display(arr);
         int ct=0;
         while(check(arr))
         {
             int min_bt_idx=Integer.MAX_VALUE;
+            int min_bt=Integer.MAX_VALUE;
             for(int i=0;i<arr.length;i++)
             {
-                if(min_bt_idx>arr[i][1] && arr[i][1]>0 && ct>=arr[i][2])
+                if(min_bt>arr[i][1] && arr[i][1]>0 && ct>=arr[i][2])
                 {
+                    min_bt=arr[i][1];
                     min_bt_idx=i;
                 }
             }
             if(! (min_bt_idx==Integer.MAX_VALUE))
-                {
-
-                    arr[min_bt_idx][1]--;
-                }
+            {
+                
+                arr[min_bt_idx][1]--;
+                if(arr[min_bt_idx][1]==0)
+                System.out.println("job : "+arr[min_bt_idx][0]);
+            }
             ct++;
         }
-
-
-
+        System.out.println("completion time : "+ct);
+        display(arr);
+        
+        
+        
     }
-    static boolean check(int arr[][])
+    static boolean check(int arr[][])//checking if all process brust time is 0 or not
     {
+        
         for(int i=0;i<arr.length;i++)
         {
             if(arr[i][1]!=0)
