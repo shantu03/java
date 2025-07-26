@@ -7,9 +7,7 @@ public class Shortest_job_first {
         // int arr[][]=assign_user();
         // int arr[][]=assign_random();
         int arr[][]={{1,7,1},{2,4,0},{3,3,1},{4,3,0}};
-        display(arr);
         System.out.println("\n"+sjf(arr));
-        display(arr);
     }
     static void srjf(int arr[][])
     {
@@ -48,6 +46,7 @@ public class Shortest_job_first {
 
     static int  sjf(int arr[][]) 
     {
+        display(arr);
         int ct=0;
         for(int j=0;j<arr.length;j++)
         {
@@ -69,8 +68,13 @@ public class Shortest_job_first {
         }
         ct+=min_bt;
         arr[min_bt_idx][1]=0;
+        if(j==0)
+        {
+            System.out.println();
+        }
         System.out.println("job : "+arr[min_bt_idx][0]);
        }
+       
     return ct;
     }
 
