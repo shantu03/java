@@ -11,7 +11,7 @@ public class shadowing_and_varargs {
 
         varargss(new int[]{1,46,23});
 
-        multiple(x, x, new String[]{"shantanu","ravi","mahesh"});
+        multiple(x, x, "shantanu","ravi","mahesh");
     }
 
     static void varargss(int ... arr)
