@@ -16,7 +16,7 @@ public class n_knight {
         }
         System.out.println();
     }
-     public static int knight(boolean arr[][],int row)
+     public static int knight(boolean arr[][],int row,int col)
 {
     if (row==arr.length){
         printo(arr);
@@ -30,7 +30,7 @@ public class n_knight {
         {
             arr[row][i]=true;
             
-            count+=knight(arr, row+1);
+            count+=knight(arr, row,col+1);
             
             arr[row][i]=false;
         }
