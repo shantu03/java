@@ -11,7 +11,7 @@ public class _17_letter_combination_of_phone_number {
 
 
         problem2("", 4);
-    }0000
+    }
     static List<String> per(String processed,String unprocessed,String[] arr)    
     {
         List<String> outer=new ArrayList<>();
@@ -23,7 +23,7 @@ public class _17_letter_combination_of_phone_number {
         
         int n=unprocessed.charAt(0)-48;
         for (int i = 0; i < arr[n-2].length(); i++) {
-            char k=arr[n-2].charAt(i);
+            char k=arr[n-1].charAt(i);
             List<String> inner=per(processed+k,unprocessed.substring(1),arr);
             outer.addAll(inner);
         }
